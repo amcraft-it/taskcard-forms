@@ -96,8 +96,8 @@
 
 <!-- Error Page (no ID provided) -->
 <div id="errorPage" class="hidden">
-  <div class="error" style="padding: 20px; background: #ffebee; border-radius: 4px; text-align: center;">
-    <h2>Error: No ID Provided</h2>
+  <div style="padding: 20px; background: #ffebee; border-radius: 4px; text-align: center;">
+    <h2 style="color: #d32f2f;">Error: No ID Provided</h2>
     <p>Please scan a valid QR code to access this page.</p>
   </div>
 </div>
@@ -106,7 +106,7 @@
 <div id="taskCardFormContainer" class="hidden">
   <h1>Enter Data for Task Card: <span id="taskCardId"></span></h1>
   
-  <form id="taskCardForm">
+  <form id="taskCardForm" method="GET" action="https://script.google.com/macros/s/AKfycbwbJ85F3lOcIntJcjmiy2eQ8tiDvt7_wRPFy24ciyg5xRE4XJVFFHmIwXDYN4uzZ3R_Yg/exec">
     <input type="hidden" id="taskUniqueId" name="uniqueId">
     <input type="hidden" name="action" value="submitFormData">
     
@@ -163,7 +163,7 @@
     <input type="text" id="operatorname" name="operatorname" required>
 
     <!-- Submit Button -->
-    <button type="button" id="taskSubmitBtn" onclick="submitTaskForm()">Submit</button>
+    <button type="submit" id="taskSubmitBtn">Submit</button>
     
     <!-- Message Area -->
     <div id="taskMessage" class="message" style="display:none;"></div>
@@ -174,7 +174,7 @@
 <div id="qcFormContainer" class="hidden">
   <h1>Enter QC Data for Task Card: <span id="qcTaskCardId"></span></h1>
   
-  <form id="qcForm">
+  <form id="qcForm" method="GET" action="https://script.google.com/macros/s/AKfycbwbJ85F3lOcIntJcjmiy2eQ8tiDvt7_wRPFy24ciyg5xRE4XJVFFHmIwXDYN4uzZ3R_Yg/exec">
     <input type="hidden" id="qcUniqueId" name="uniqueId">
     <input type="hidden" name="action" value="submitQCFormData">
     
@@ -199,7 +199,7 @@
     <input type="text" id="qcemployee" name="qcemployee" required>
 
     <!-- Submit Button -->
-    <button type="button" id="qcSubmitBtn" onclick="submitQCForm()">Submit</button>
+    <button type="submit" id="qcSubmitBtn">Submit</button>
 
     <!-- Message div for error or success messages -->
     <div id="qcMessage" class="message" style="display:none;"></div>
@@ -210,7 +210,7 @@
 <div id="scrappedFormContainer" class="hidden">
   <h1>Enter Scrapped Qty After Support Removal for Task Card: <span id="scrappedTaskCardId"></span></h1>
   
-  <form id="scrappedPostProcessingForm">
+  <form id="scrappedPostProcessingForm" method="GET" action="https://script.google.com/macros/s/AKfycbwbJ85F3lOcIntJcjmiy2eQ8tiDvt7_wRPFy24ciyg5xRE4XJVFFHmIwXDYN4uzZ3R_Yg/exec">
     <input type="hidden" id="scrappedUniqueId" name="uniqueId">
     <input type="hidden" name="action" value="submitScrappedPostProcessingData">
     
@@ -221,7 +221,7 @@
     <!-- Conditional Notes Section -->
     <div id="notesSection" class="hidden">
       <label for="scrappedNotes">Reason for scrap:</label>
-      <textarea id="scrappedNotes" name="scrappedNotes" rows="3"></textarea>
+      <textarea id="scrappedNotes" name="notes" rows="3"></textarea>
     </div>
 
     <!-- Post-proc Employee name -->
@@ -229,7 +229,7 @@
     <input type="text" id="postprocemployee" name="postprocemployee" required>
 
     <!-- Submit Button -->
-    <button type="button" id="scrappedSubmitBtn" onclick="submitScrappedForm()">Submit</button>
+    <button type="submit" id="scrappedSubmitBtn">Submit</button>
     
     <!-- Message div for error or success messages -->
     <div id="scrappedMessage" class="message" style="display:none;"></div>
@@ -237,9 +237,6 @@
 </div>
 
 <script>
-  // CONFIGURATION - Your Apps Script Web App URL
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbJ85F3lOcIntJcjmiy2eQ8tiDvt7_wRPFy24ciyg5xRE4XJVFFHmIwXDYN4uzZ3R_Yg/exec';
-
   // Get URL parameters
   const urlParams = new URLSearchParams(window.location.search);
   const uniqueId = urlParams.get('id');
@@ -282,168 +279,6 @@
       document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
     }
   });
-
-  // Generic function to submit form data
-  function submitToAppsScript(formData, messageDiv, submitBtn, form, successCallback) {
-    // Create a hidden iframe for form submission
-    var iframe = document.createElement('iframe');
-    iframe.name = 'hidden_iframe_' + Date.now();
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-
-    // Create a hidden form
-    var hiddenForm = document.createElement('form');
-    hiddenForm.method = 'POST';
-    hiddenForm.action = APPS_SCRIPT_URL;
-    hiddenForm.target = iframe.name;
-    hiddenForm.style.display = 'none';
-
-    // Add form data as hidden inputs
-    for (var key in formData) {
-      var input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = formData[key];
-      hiddenForm.appendChild(input);
-    }
-
-    document.body.appendChild(hiddenForm);
-
-    // Submit the form
-    hiddenForm.submit();
-
-    // Assume success after a short delay (since we can't read cross-origin response)
-    setTimeout(function() {
-      messageDiv.textContent = 'Data submitted successfully! ✓';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
-      
-      if (successCallback) {
-        successCallback();
-      }
-
-      // Cleanup
-      document.body.removeChild(hiddenForm);
-      document.body.removeChild(iframe);
-    }, 2000);
-  }
-
-  // Task Card Form Submission
-  function submitTaskForm() {
-    var form = document.getElementById('taskCardForm');
-    var messageDiv = document.getElementById('taskMessage');
-    var submitBtn = document.getElementById('taskSubmitBtn');
-
-    // Check if form is valid
-    if (!form.checkValidity()) {
-      messageDiv.textContent = 'Please fill all fields before submitting.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      form.reportValidity();
-      return;
-    }
-
-    // Disable submit button and show loading
-    submitBtn.disabled = true;
-    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
-    // Prepare form data
-    var formData = {
-      action: 'submitFormData',
-      printerId: document.getElementById('printerId').value,
-      qtyTaskCard: document.getElementById('qtyTaskCard').value,
-      taskCardStatus: document.getElementById('taskCardStatus').value,
-      qtySuccessful: document.getElementById('qtySuccessful').value,
-      qtyScrapped: document.getElementById('qtyScrapped').value,
-      dateTimeFinished: document.getElementById('dateTimeFinished').value,
-      notes: document.getElementById('notes').value,
-      operatorname: document.getElementById('operatorname').value,
-      uniqueId: uniqueId
-    };
-
-    submitToAppsScript(formData, messageDiv, submitBtn, form, function() {
-      form.reset();
-      document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
-      document.getElementById('taskUniqueId').value = uniqueId;
-    });
-  }
-
-  // QC Form Submission
-  function submitQCForm() {
-    var form = document.getElementById('qcForm');
-    var messageDiv = document.getElementById('qcMessage');
-    var submitBtn = document.getElementById('qcSubmitBtn');
-
-    // Check if form is valid
-    if (!form.checkValidity()) {
-      messageDiv.textContent = 'Please fill all fields before submitting.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      form.reportValidity();
-      return;
-    }
-
-    // Disable submit button and show loading
-    submitBtn.disabled = true;
-    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
-    // Prepare form data
-    var formData = {
-      action: 'submitQCFormData',
-      qcPassedQty: document.getElementById('qcPassedQty').value,
-      totalScrappedQty: document.getElementById('totalScrappedQty').value,
-      storedForFuture: document.getElementById('storedForFuture').value,
-      qcNotes: document.getElementById('qcNotes').value,
-      qcemployee: document.getElementById('qcemployee').value,
-      uniqueId: uniqueId
-    };
-
-    submitToAppsScript(formData, messageDiv, submitBtn, form, function() {
-      form.reset();
-      document.getElementById('qcUniqueId').value = uniqueId;
-    });
-  }
-
-  // Scrapped Post-Processing Form Submission
-  function submitScrappedForm() {
-    var form = document.getElementById('scrappedPostProcessingForm');
-    var messageDiv = document.getElementById('scrappedMessage');
-    var submitBtn = document.getElementById('scrappedSubmitBtn');
-
-    // Check if form is valid
-    if (!form.checkValidity()) {
-      messageDiv.textContent = 'Please fill all fields before submitting.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      form.reportValidity();
-      return;
-    }
-
-    // Disable submit button and show loading
-    submitBtn.disabled = true;
-    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
-    // Prepare form data
-    var formData = {
-      action: 'submitScrappedPostProcessingData',
-      qtyScrappedPostProcessing: document.getElementById('qtyScrappedPostProcessing').value,
-      notes: document.getElementById('scrappedNotes').value || '',
-      postprocemployee: document.getElementById('postprocemployee').value,
-      uniqueId: uniqueId
-    };
-
-    submitToAppsScript(formData, messageDiv, submitBtn, form, function() {
-      form.reset();
-      document.getElementById('notesSection').classList.add('hidden');
-      document.getElementById('scrappedUniqueId').value = uniqueId;
-    });
-  }
 </script>
 
 </body>
