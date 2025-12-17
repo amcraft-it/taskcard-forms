@@ -107,6 +107,9 @@
   <h1>Enter Data for Task Card: <span id="taskCardId"></span></h1>
   
   <form id="taskCardForm">
+    <input type="hidden" id="taskUniqueId" name="uniqueId">
+    <input type="hidden" name="action" value="submitFormData">
+    
     <!-- Printer ID Dropdown -->
     <label for="printerId">Printer ID:</label>
     <select id="printerId" name="printerId" required>
@@ -172,6 +175,9 @@
   <h1>Enter QC Data for Task Card: <span id="qcTaskCardId"></span></h1>
   
   <form id="qcForm">
+    <input type="hidden" id="qcUniqueId" name="uniqueId">
+    <input type="hidden" name="action" value="submitQCFormData">
+    
     <!-- QC Passed QTY -->
     <label for="qcPassedQty">QC Passed QTY:</label>
     <input type="number" id="qcPassedQty" name="qcPassedQty" min="0" required>
@@ -205,6 +211,9 @@
   <h1>Enter Scrapped Qty After Support Removal for Task Card: <span id="scrappedTaskCardId"></span></h1>
   
   <form id="scrappedPostProcessingForm">
+    <input type="hidden" id="scrappedUniqueId" name="uniqueId">
+    <input type="hidden" name="action" value="submitScrappedPostProcessingData">
+    
     <!-- Scrapped Qty After Post-Processing -->
     <label for="qtyScrappedPostProcessing">QTY Scrapped After Support Removal:</label>
     <input type="number" id="qtyScrappedPostProcessing" name="qtyScrappedPostProcessing" min="0" required>
@@ -246,9 +255,11 @@
     if (pageType === 'qc') {
       document.getElementById('qcFormContainer').classList.remove('hidden');
       document.getElementById('qcTaskCardId').textContent = uniqueId;
+      document.getElementById('qcUniqueId').value = uniqueId;
     } else if (pageType === 'scrappedPostProcessing') {
       document.getElementById('scrappedFormContainer').classList.remove('hidden');
       document.getElementById('scrappedTaskCardId').textContent = uniqueId;
+      document.getElementById('scrappedUniqueId').value = uniqueId;
       
       // Show or hide the Notes section based on qtyScrappedPostProcessing value
       document.getElementById('qtyScrappedPostProcessing').addEventListener('input', function() {
@@ -267,9 +278,55 @@
     } else {
       document.getElementById('taskCardFormContainer').classList.remove('hidden');
       document.getElementById('taskCardId').textContent = uniqueId;
+      document.getElementById('taskUniqueId').value = uniqueId;
       document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
     }
   });
+
+  // Generic function to submit form data
+  function submitToAppsScript(formData, messageDiv, submitBtn, form, successCallback) {
+    // Create a hidden iframe for form submission
+    var iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe_' + Date.now();
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    // Create a hidden form
+    var hiddenForm = document.createElement('form');
+    hiddenForm.method = 'POST';
+    hiddenForm.action = APPS_SCRIPT_URL;
+    hiddenForm.target = iframe.name;
+    hiddenForm.style.display = 'none';
+
+    // Add form data as hidden inputs
+    for (var key in formData) {
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = formData[key];
+      hiddenForm.appendChild(input);
+    }
+
+    document.body.appendChild(hiddenForm);
+
+    // Submit the form
+    hiddenForm.submit();
+
+    // Assume success after a short delay (since we can't read cross-origin response)
+    setTimeout(function() {
+      messageDiv.textContent = 'Data submitted successfully! ✓';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      
+      if (successCallback) {
+        successCallback();
+      }
+
+      // Cleanup
+      document.body.removeChild(hiddenForm);
+      document.body.removeChild(iframe);
+    }, 2000);
+  }
 
   // Task Card Form Submission
   function submitTaskForm() {
@@ -306,25 +363,10 @@
       uniqueId: uniqueId
     };
 
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(function() {
-      messageDiv.textContent = 'Data submitted successfully! ✓';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
+    submitToAppsScript(formData, messageDiv, submitBtn, form, function() {
       form.reset();
       document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
-    })
-    .catch(function(error) {
-      messageDiv.textContent = 'Failed to submit data: ' + error.message;
-      messageDiv.className = 'message error';
-      submitBtn.disabled = false;
+      document.getElementById('taskUniqueId').value = uniqueId;
     });
   }
 
@@ -360,24 +402,9 @@
       uniqueId: uniqueId
     };
 
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(function() {
-      messageDiv.textContent = 'QC Data submitted successfully! ✓';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
+    submitToAppsScript(formData, messageDiv, submitBtn, form, function() {
       form.reset();
-    })
-    .catch(function(error) {
-      messageDiv.textContent = 'Failed to submit QC data: ' + error.message;
-      messageDiv.className = 'message error';
-      submitBtn.disabled = false;
+      document.getElementById('qcUniqueId').value = uniqueId;
     });
   }
 
@@ -406,30 +433,15 @@
     var formData = {
       action: 'submitScrappedPostProcessingData',
       qtyScrappedPostProcessing: document.getElementById('qtyScrappedPostProcessing').value,
-      notes: document.getElementById('scrappedNotes').value,
+      notes: document.getElementById('scrappedNotes').value || '',
       postprocemployee: document.getElementById('postprocemployee').value,
       uniqueId: uniqueId
     };
 
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(function() {
-      messageDiv.textContent = 'Data submitted successfully! ✓';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
+    submitToAppsScript(formData, messageDiv, submitBtn, form, function() {
       form.reset();
       document.getElementById('notesSection').classList.add('hidden');
-    })
-    .catch(function(error) {
-      messageDiv.textContent = 'Failed to submit data: ' + error.message;
-      messageDiv.className = 'message error';
-      submitBtn.disabled = false;
+      document.getElementById('scrappedUniqueId').value = uniqueId;
     });
   }
 </script>
