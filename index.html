@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Card System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+      font-size: 24px;
+    }
+    label { 
+      display: block; 
+      margin-top: 15px; 
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="number"], 
+    input[type="text"],
+    input[type="datetime-local"], 
+    select, 
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .message { 
+      margin-top: 20px; 
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .success { 
+      color: #155724;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+    }
+    .error { 
+      color: #721c24;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+    }
+    .loading {
+      color: #004085;
+      background-color: #cce5ff;
+      border: 1px solid #b8daff;
+    }
+    .hidden { 
+      display: none; 
+    }
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0,0,0,.1);
+      border-radius: 50%;
+      border-top-color: #007bff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Error Page (no ID provided) -->
+<div id="errorPage" class="hidden">
+  <div class="error" style="padding: 20px; background: #ffebee; border-radius: 4px; text-align: center;">
+    <h2>Error: No ID Provided</h2>
+    <p>Please scan a valid QR code to access this page.</p>
+  </div>
+</div>
+
+<!-- Task Card Form -->
+<div id="taskCardFormContainer" class="hidden">
+  <h1>Enter Data for Task Card: <span id="taskCardId"></span></h1>
+  
+  <form id="taskCardForm">
+    <!-- Printer ID Dropdown -->
+    <label for="printerId">Printer ID:</label>
+    <select id="printerId" name="printerId" required>
+      <option value="">Select a Printer ID</option>
+      <option value="AM01">AM01</option>
+      <option value="AM02">AM02</option>
+      <option value="AM03">AM03</option>
+      <option value="AM04">AM04</option>
+      <option value="AMCRP107">AMCRP107</option>
+      <option value="AMCRP108">AMCRP108</option>
+      <option value="AM05">AM05</option>
+      <option value="AM06">AM06</option>
+      <option value="AM14">AM14</option>
+      <option value="AM15">AM15</option> 
+      <option value="PD01">PD01</option>
+      <option value="PD02">PD02</option>
+      <option value="PD05">PD05</option>
+    </select>
+    
+    <!-- Qty per Task Card -->
+    <label for="qtyTaskCard">Qty per Task Card:</label>
+    <input type="number" id="qtyTaskCard" name="qtyTaskCard" min="0" required>
+
+    <!-- Task Card Status Dropdown -->
+    <label for="taskCardStatus">Task Card Status:</label>
+    <select id="taskCardStatus" name="taskCardStatus" required>
+      <option value="">Select Status</option>
+      <option value="Parts printed">Parts printed</option>
+      <option value="Parts partially printed">Parts partially printed</option>
+      <option value="Failed print">Failed print</option>
+    </select>
+
+    <!-- Qty Successful -->
+    <label for="qtySuccessful">Qty Successful:</label>
+    <input type="number" id="qtySuccessful" name="qtySuccessful" min="0" required>
+
+    <!-- Qty Scrapped -->
+    <label for="qtyScrapped">Qty Scrapped:</label>
+    <input type="number" id="qtyScrapped" name="qtyScrapped" min="0" required>
+
+    <!-- Date and Time Finished -->
+    <label for="dateTimeFinished">Date and Time Finished:</label>
+    <input type="datetime-local" id="dateTimeFinished" name="dateTimeFinished" required>
+
+    <!-- Notes -->
+    <label for="notes">Notes:</label>
+    <textarea id="notes" name="notes" rows="3" required></textarea>
+
+    <!-- Operator name -->
+    <label for="operatorname">Operator name:</label>
+    <input type="text" id="operatorname" name="operatorname" required>
+
+    <!-- Submit Button -->
+    <button type="button" id="taskSubmitBtn" onclick="submitTaskForm()">Submit</button>
+    
+    <!-- Message Area -->
+    <div id="taskMessage" class="message" style="display:none;"></div>
+  </form>
+</div>
+
+<!-- QC Form -->
+<div id="qcFormContainer" class="hidden">
+  <h1>Enter QC Data for Task Card: <span id="qcTaskCardId"></span></h1>
+  
+  <form id="qcForm">
+    <!-- QC Passed QTY -->
+    <label for="qcPassedQty">QC Passed QTY:</label>
+    <input type="number" id="qcPassedQty" name="qcPassedQty" min="0" required>
+
+    <!-- Total Scrapped QTY -->
+    <label for="totalScrappedQty">Total Scrapped QTY:</label>
+    <input type="number" id="totalScrappedQty" name="totalScrappedQty" min="0" required>
+
+    <!-- Stored for Future -->
+    <label for="storedForFuture">Stored for Future:</label>
+    <input type="number" id="storedForFuture" name="storedForFuture" min="0" required>
+
+    <!-- QC Notes -->
+    <label for="qcNotes">QC Notes:</label>
+    <textarea id="qcNotes" name="qcNotes" rows="3" required></textarea>
+
+    <!-- QC Employee name -->
+    <label for="qcemployee">Employee:</label>
+    <input type="text" id="qcemployee" name="qcemployee" required>
+
+    <!-- Submit Button -->
+    <button type="button" id="qcSubmitBtn" onclick="submitQCForm()">Submit</button>
+
+    <!-- Message div for error or success messages -->
+    <div id="qcMessage" class="message" style="display:none;"></div>
+  </form>
+</div>
+
+<!-- Scrapped Post-Processing Form -->
+<div id="scrappedFormContainer" class="hidden">
+  <h1>Enter Scrapped Qty After Support Removal for Task Card: <span id="scrappedTaskCardId"></span></h1>
+  
+  <form id="scrappedPostProcessingForm">
+    <!-- Scrapped Qty After Post-Processing -->
+    <label for="qtyScrappedPostProcessing">QTY Scrapped After Support Removal:</label>
+    <input type="number" id="qtyScrappedPostProcessing" name="qtyScrappedPostProcessing" min="0" required>
+
+    <!-- Conditional Notes Section -->
+    <div id="notesSection" class="hidden">
+      <label for="scrappedNotes">Reason for scrap:</label>
+      <textarea id="scrappedNotes" name="scrappedNotes" rows="3"></textarea>
+    </div>
+
+    <!-- Post-proc Employee name -->
+    <label for="postprocemployee">Employee:</label>
+    <input type="text" id="postprocemployee" name="postprocemployee" required>
+
+    <!-- Submit Button -->
+    <button type="button" id="scrappedSubmitBtn" onclick="submitScrappedForm()">Submit</button>
+    
+    <!-- Message div for error or success messages -->
+    <div id="scrappedMessage" class="message" style="display:none;"></div>
+  </form>
+</div>
+
+<script>
+  // CONFIGURATION - Your Apps Script Web App URL
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbJ85F3lOcIntJcjmiy2eQ8tiDvt7_wRPFy24ciyg5xRE4XJVFFHmIwXDYN4uzZ3R_Yg/exec';
+
+  // Get URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const uniqueId = urlParams.get('id');
+  const pageType = urlParams.get('page') || 'task';
+
+  // Initialize page on load
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!uniqueId) {
+      document.getElementById('errorPage').classList.remove('hidden');
+      return;
+    }
+
+    if (pageType === 'qc') {
+      document.getElementById('qcFormContainer').classList.remove('hidden');
+      document.getElementById('qcTaskCardId').textContent = uniqueId;
+    } else if (pageType === 'scrappedPostProcessing') {
+      document.getElementById('scrappedFormContainer').classList.remove('hidden');
+      document.getElementById('scrappedTaskCardId').textContent = uniqueId;
+      
+      // Show or hide the Notes section based on qtyScrappedPostProcessing value
+      document.getElementById('qtyScrappedPostProcessing').addEventListener('input', function() {
+        var notesSection = document.getElementById('notesSection');
+        var notesField = document.getElementById('scrappedNotes');
+
+        if (parseInt(this.value) > 0) {
+          notesSection.classList.remove('hidden');
+          notesField.setAttribute('required', 'true');
+        } else {
+          notesSection.classList.add('hidden');
+          notesField.removeAttribute('required');
+          notesField.value = '';
+        }
+      });
+    } else {
+      document.getElementById('taskCardFormContainer').classList.remove('hidden');
+      document.getElementById('taskCardId').textContent = uniqueId;
+      document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
+    }
+  });
+
+  // Task Card Form Submission
+  function submitTaskForm() {
+    var form = document.getElementById('taskCardForm');
+    var messageDiv = document.getElementById('taskMessage');
+    var submitBtn = document.getElementById('taskSubmitBtn');
+
+    // Check if form is valid
+    if (!form.checkValidity()) {
+      messageDiv.textContent = 'Please fill all fields before submitting.';
+      messageDiv.className = 'message error';
+      messageDiv.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    // Disable submit button and show loading
+    submitBtn.disabled = true;
+    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
+    messageDiv.className = 'message loading';
+    messageDiv.style.display = 'block';
+
+    // Prepare form data
+    var formData = {
+      action: 'submitFormData',
+      printerId: document.getElementById('printerId').value,
+      qtyTaskCard: document.getElementById('qtyTaskCard').value,
+      taskCardStatus: document.getElementById('taskCardStatus').value,
+      qtySuccessful: document.getElementById('qtySuccessful').value,
+      qtyScrapped: document.getElementById('qtyScrapped').value,
+      dateTimeFinished: document.getElementById('dateTimeFinished').value,
+      notes: document.getElementById('notes').value,
+      operatorname: document.getElementById('operatorname').value,
+      uniqueId: uniqueId
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(function() {
+      messageDiv.textContent = 'Data submitted successfully! ✓';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      form.reset();
+      document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
+    })
+    .catch(function(error) {
+      messageDiv.textContent = 'Failed to submit data: ' + error.message;
+      messageDiv.className = 'message error';
+      submitBtn.disabled = false;
+    });
+  }
+
+  // QC Form Submission
+  function submitQCForm() {
+    var form = document.getElementById('qcForm');
+    var messageDiv = document.getElementById('qcMessage');
+    var submitBtn = document.getElementById('qcSubmitBtn');
+
+    // Check if form is valid
+    if (!form.checkValidity()) {
+      messageDiv.textContent = 'Please fill all fields before submitting.';
+      messageDiv.className = 'message error';
+      messageDiv.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    // Disable submit button and show loading
+    submitBtn.disabled = true;
+    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
+    messageDiv.className = 'message loading';
+    messageDiv.style.display = 'block';
+
+    // Prepare form data
+    var formData = {
+      action: 'submitQCFormData',
+      qcPassedQty: document.getElementById('qcPassedQty').value,
+      totalScrappedQty: document.getElementById('totalScrappedQty').value,
+      storedForFuture: document.getElementById('storedForFuture').value,
+      qcNotes: document.getElementById('qcNotes').value,
+      qcemployee: document.getElementById('qcemployee').value,
+      uniqueId: uniqueId
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(function() {
+      messageDiv.textContent = 'QC Data submitted successfully! ✓';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      form.reset();
+    })
+    .catch(function(error) {
+      messageDiv.textContent = 'Failed to submit QC data: ' + error.message;
+      messageDiv.className = 'message error';
+      submitBtn.disabled = false;
+    });
+  }
+
+  // Scrapped Post-Processing Form Submission
+  function submitScrappedForm() {
+    var form = document.getElementById('scrappedPostProcessingForm');
+    var messageDiv = document.getElementById('scrappedMessage');
+    var submitBtn = document.getElementById('scrappedSubmitBtn');
+
+    // Check if form is valid
+    if (!form.checkValidity()) {
+      messageDiv.textContent = 'Please fill all fields before submitting.';
+      messageDiv.className = 'message error';
+      messageDiv.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    // Disable submit button and show loading
+    submitBtn.disabled = true;
+    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
+    messageDiv.className = 'message loading';
+    messageDiv.style.display = 'block';
+
+    // Prepare form data
+    var formData = {
+      action: 'submitScrappedPostProcessingData',
+      qtyScrappedPostProcessing: document.getElementById('qtyScrappedPostProcessing').value,
+      notes: document.getElementById('scrappedNotes').value,
+      postprocemployee: document.getElementById('postprocemployee').value,
+      uniqueId: uniqueId
+    };
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(function() {
+      messageDiv.textContent = 'Data submitted successfully! ✓';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      form.reset();
+      document.getElementById('notesSection').classList.add('hidden');
+    })
+    .catch(function(error) {
+      messageDiv.textContent = 'Failed to submit data: ' + error.message;
+      messageDiv.className = 'message error';
+      submitBtn.disabled = false;
+    });
+  }
+</script>
+
+</body>
+</html>
