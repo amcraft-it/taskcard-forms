@@ -106,9 +106,8 @@
 <div id="taskCardFormContainer" class="hidden">
   <h1>Enter Data for Task Card: <span id="taskCardId"></span></h1>
   
-  <form id="taskCardForm" method="GET" action="https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec">
+  <form id="taskCardForm">
     <input type="hidden" id="taskUniqueId" name="uniqueId">
-    <input type="hidden" name="action" value="submitFormData">
     
     <!-- Printer ID Dropdown -->
     <label for="printerId">Printer ID:</label>
@@ -163,7 +162,7 @@
     <input type="text" id="operatorname" name="operatorname" required>
 
     <!-- Submit Button -->
-    <button type="submit" id="taskSubmitBtn">Submit</button>
+    <button type="button" id="taskSubmitBtn" onclick="submitTaskForm()">Submit</button>
     
     <!-- Message Area -->
     <div id="taskMessage" class="message" style="display:none;"></div>
@@ -174,9 +173,8 @@
 <div id="qcFormContainer" class="hidden">
   <h1>Enter QC Data for Task Card: <span id="qcTaskCardId"></span></h1>
   
-  <form id="qcForm" method="GET" action="https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec">
+  <form id="qcForm">
     <input type="hidden" id="qcUniqueId" name="uniqueId">
-    <input type="hidden" name="action" value="submitQCFormData">
     
     <!-- QC Passed QTY -->
     <label for="qcPassedQty">QC Passed QTY:</label>
@@ -199,7 +197,7 @@
     <input type="text" id="qcemployee" name="qcemployee" required>
 
     <!-- Submit Button -->
-    <button type="submit" id="qcSubmitBtn">Submit</button>
+    <button type="button" id="qcSubmitBtn" onclick="submitQCFormData()">Submit</button>
 
     <!-- Message div for error or success messages -->
     <div id="qcMessage" class="message" style="display:none;"></div>
@@ -210,9 +208,8 @@
 <div id="scrappedFormContainer" class="hidden">
   <h1>Enter Scrapped Qty After Support Removal for Task Card: <span id="scrappedTaskCardId"></span></h1>
   
-  <form id="scrappedPostProcessingForm" method="GET" action="https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec">
+  <form id="scrappedPostProcessingForm">
     <input type="hidden" id="scrappedUniqueId" name="uniqueId">
-    <input type="hidden" name="action" value="submitScrappedPostProcessingData">
     
     <!-- Scrapped Qty After Post-Processing -->
     <label for="qtyScrappedPostProcessing">QTY Scrapped After Support Removal:</label>
@@ -229,7 +226,7 @@
     <input type="text" id="postprocemployee" name="postprocemployee" required>
 
     <!-- Submit Button -->
-    <button type="submit" id="scrappedSubmitBtn">Submit</button>
+    <button type="button" id="scrappedSubmitBtn" onclick="submitScrappedForm()">Submit</button>
     
     <!-- Message div for error or success messages -->
     <div id="scrappedMessage" class="message" style="display:none;"></div>
@@ -279,6 +276,106 @@
       document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
     }
   });
+
+  // Task Card Form Submission
+  function submitTaskForm() {
+    var form = document.getElementById('taskCardForm');
+    var messageDiv = document.getElementById('taskMessage');
+    var submitBtn = document.getElementById('taskSubmitBtn');
+
+    if (!form.checkValidity()) {
+      messageDiv.textContent = 'Please fill all fields before submitting.';
+      messageDiv.className = 'message error';
+      messageDiv.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    messageDiv.innerHTML = 'Submitting...';
+    messageDiv.className = 'message loading';
+    messageDiv.style.display = 'block';
+
+    var url = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
+    var params = new URLSearchParams({
+      action: 'submitFormData',
+      uniqueId: document.getElementById('taskUniqueId').value,
+      printerId: document.getElementById('printerId').value,
+      qtyTaskCard: document.getElementById('qtyTaskCard').value,
+      taskCardStatus: document.getElementById('taskCardStatus').value,
+      qtySuccessful: document.getElementById('qtySuccessful').value,
+      qtyScrapped: document.getElementById('qtyScrapped').value,
+      dateTimeFinished: document.getElementById('dateTimeFinished').value,
+      notes: document.getElementById('notes').value,
+      operatorname: document.getElementById('operatorname').value
+    });
+
+    window.location.href = url + '?' + params.toString();
+  }
+
+  // QC Form Submission
+  function submitQCFormData() {
+    var form = document.getElementById('qcForm');
+    var messageDiv = document.getElementById('qcMessage');
+    var submitBtn = document.getElementById('qcSubmitBtn');
+
+    if (!form.checkValidity()) {
+      messageDiv.textContent = 'Please fill all fields before submitting.';
+      messageDiv.className = 'message error';
+      messageDiv.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    messageDiv.innerHTML = 'Submitting...';
+    messageDiv.className = 'message loading';
+    messageDiv.style.display = 'block';
+
+    var url = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
+    var params = new URLSearchParams({
+      action: 'submitQCFormData',
+      uniqueId: document.getElementById('qcUniqueId').value,
+      qcPassedQty: document.getElementById('qcPassedQty').value,
+      totalScrappedQty: document.getElementById('totalScrappedQty').value,
+      storedForFuture: document.getElementById('storedForFuture').value,
+      qcNotes: document.getElementById('qcNotes').value,
+      qcemployee: document.getElementById('qcemployee').value
+    });
+
+    window.location.href = url + '?' + params.toString();
+  }
+
+  // Scrapped Post-Processing Form Submission
+  function submitScrappedForm() {
+    var form = document.getElementById('scrappedPostProcessingForm');
+    var messageDiv = document.getElementById('scrappedMessage');
+    var submitBtn = document.getElementById('scrappedSubmitBtn');
+
+    if (!form.checkValidity()) {
+      messageDiv.textContent = 'Please fill all fields before submitting.';
+      messageDiv.className = 'message error';
+      messageDiv.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    messageDiv.innerHTML = 'Submitting...';
+    messageDiv.className = 'message loading';
+    messageDiv.style.display = 'block';
+
+    var url = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
+    var params = new URLSearchParams({
+      action: 'submitScrappedPostProcessingData',
+      uniqueId: document.getElementById('scrappedUniqueId').value,
+      qtyScrappedPostProcessing: document.getElementById('qtyScrappedPostProcessing').value,
+      notes: document.getElementById('scrappedNotes').value,
+      postprocemployee: document.getElementById('postprocemployee').value
+    });
+
+    window.location.href = url + '?' + params.toString();
+  }
 </script>
 
 </body>
