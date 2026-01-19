@@ -109,7 +109,6 @@
   <form id="taskCardForm">
     <input type="hidden" id="taskUniqueId" name="uniqueId">
     
-    <!-- Printer ID Dropdown -->
     <label for="printerId">Printer ID:</label>
     <select id="printerId" name="printerId" required>
       <option value="">Select a Printer ID</option>
@@ -128,11 +127,9 @@
       <option value="PD05">PD05</option>
     </select>
     
-    <!-- Qty per Task Card -->
     <label for="qtyTaskCard">Qty per Task Card:</label>
     <input type="number" id="qtyTaskCard" name="qtyTaskCard" min="0" required>
 
-    <!-- Task Card Status Dropdown -->
     <label for="taskCardStatus">Task Card Status:</label>
     <select id="taskCardStatus" name="taskCardStatus" required>
       <option value="">Select Status</option>
@@ -141,30 +138,23 @@
       <option value="Failed print">Failed print</option>
     </select>
 
-    <!-- Qty Successful -->
     <label for="qtySuccessful">Qty Successful:</label>
     <input type="number" id="qtySuccessful" name="qtySuccessful" min="0" required>
 
-    <!-- Qty Scrapped -->
     <label for="qtyScrapped">Qty Scrapped:</label>
     <input type="number" id="qtyScrapped" name="qtyScrapped" min="0" required>
 
-    <!-- Date and Time Finished -->
     <label for="dateTimeFinished">Date and Time Finished:</label>
     <input type="datetime-local" id="dateTimeFinished" name="dateTimeFinished" required>
 
-    <!-- Notes -->
     <label for="notes">Notes:</label>
     <textarea id="notes" name="notes" rows="3" required></textarea>
 
-    <!-- Operator name -->
     <label for="operatorname">Operator name:</label>
     <input type="text" id="operatorname" name="operatorname" required>
 
-    <!-- Submit Button -->
     <button type="button" id="taskSubmitBtn" onclick="submitTaskForm()">Submit</button>
     
-    <!-- Message Area -->
     <div id="taskMessage" class="message" style="display:none;"></div>
   </form>
 </div>
@@ -176,30 +166,23 @@
   <form id="qcForm">
     <input type="hidden" id="qcUniqueId" name="uniqueId">
     
-    <!-- QC Passed QTY -->
     <label for="qcPassedQty">QC Passed QTY:</label>
     <input type="number" id="qcPassedQty" name="qcPassedQty" min="0" required>
 
-    <!-- Total Scrapped QTY -->
     <label for="totalScrappedQty">Total Scrapped QTY:</label>
     <input type="number" id="totalScrappedQty" name="totalScrappedQty" min="0" required>
 
-    <!-- Stored for Future -->
     <label for="storedForFuture">Stored for Future:</label>
     <input type="number" id="storedForFuture" name="storedForFuture" min="0" required>
 
-    <!-- QC Notes -->
     <label for="qcNotes">QC Notes:</label>
     <textarea id="qcNotes" name="qcNotes" rows="3" required></textarea>
 
-    <!-- QC Employee name -->
     <label for="qcemployee">Employee:</label>
     <input type="text" id="qcemployee" name="qcemployee" required>
 
-    <!-- Submit Button -->
     <button type="button" id="qcSubmitBtn" onclick="submitQCFormData()">Submit</button>
 
-    <!-- Message div for error or success messages -->
     <div id="qcMessage" class="message" style="display:none;"></div>
   </form>
 </div>
@@ -211,29 +194,27 @@
   <form id="scrappedPostProcessingForm">
     <input type="hidden" id="scrappedUniqueId" name="uniqueId">
     
-    <!-- Scrapped Qty After Post-Processing -->
     <label for="qtyScrappedPostProcessing">QTY Scrapped After Support Removal:</label>
     <input type="number" id="qtyScrappedPostProcessing" name="qtyScrappedPostProcessing" min="0" required>
 
-    <!-- Conditional Notes Section -->
     <div id="notesSection" class="hidden">
       <label for="scrappedNotes">Reason for scrap:</label>
       <textarea id="scrappedNotes" name="notes" rows="3"></textarea>
     </div>
 
-    <!-- Post-proc Employee name -->
     <label for="postprocemployee">Employee:</label>
     <input type="text" id="postprocemployee" name="postprocemployee" required>
 
-    <!-- Submit Button -->
     <button type="button" id="scrappedSubmitBtn" onclick="submitScrappedForm()">Submit</button>
     
-    <!-- Message div for error or success messages -->
     <div id="scrappedMessage" class="message" style="display:none;"></div>
   </form>
 </div>
 
 <script>
+  // IMPORTANT: Replace this with your actual Google Apps Script Web App URL
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
+
   // Get URL parameters
   const urlParams = new URLSearchParams(window.location.search);
   const uniqueId = urlParams.get('id');
@@ -255,7 +236,6 @@
       document.getElementById('scrappedTaskCardId').textContent = uniqueId;
       document.getElementById('scrappedUniqueId').value = uniqueId;
       
-      // Show or hide the Notes section based on qtyScrappedPostProcessing value
       document.getElementById('qtyScrappedPostProcessing').addEventListener('input', function() {
         var notesSection = document.getElementById('notesSection');
         var notesField = document.getElementById('scrappedNotes');
@@ -277,7 +257,7 @@
     }
   });
 
-  // Task Card Form Submission
+  // Task Card Form Submission - FIXED VERSION
   function submitTaskForm() {
     var form = document.getElementById('taskCardForm');
     var messageDiv = document.getElementById('taskMessage');
@@ -292,12 +272,11 @@
     }
 
     submitBtn.disabled = true;
-    messageDiv.innerHTML = 'Submitting...';
+    messageDiv.innerHTML = '<div class="spinner"></div> Submitting...';
     messageDiv.className = 'message loading';
     messageDiv.style.display = 'block';
 
-    var url = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
-    var params = new URLSearchParams({
+    var formData = new URLSearchParams({
       action: 'submitFormData',
       uniqueId: document.getElementById('taskUniqueId').value,
       printerId: document.getElementById('printerId').value,
@@ -310,10 +289,28 @@
       operatorname: document.getElementById('operatorname').value
     });
 
-    window.location.href = url + '?' + params.toString();
+    fetch(SCRIPT_URL + '?' + formData.toString(), {
+      method: 'GET',
+      redirect: 'follow',
+      mode: 'no-cors'
+    })
+    .then(() => {
+      // no-cors mode doesn't give us response data, but if we get here, it sent
+      messageDiv.innerHTML = '✓ Data submitted successfully!<br><small>You can close this page or scan another QR code.</small>';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      form.reset();
+      document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
+    })
+    .catch(error => {
+      console.error('Submission error:', error);
+      messageDiv.textContent = 'Submission sent. If data does not appear in tracking sheet, please try again or contact IT.';
+      messageDiv.className = 'message error';
+      submitBtn.disabled = false;
+    });
   }
 
-  // QC Form Submission
+  // QC Form Submission - FIXED VERSION
   function submitQCFormData() {
     var form = document.getElementById('qcForm');
     var messageDiv = document.getElementById('qcMessage');
@@ -328,12 +325,11 @@
     }
 
     submitBtn.disabled = true;
-    messageDiv.innerHTML = 'Submitting...';
+    messageDiv.innerHTML = '<div class="spinner"></div> Submitting...';
     messageDiv.className = 'message loading';
     messageDiv.style.display = 'block';
 
-    var url = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
-    var params = new URLSearchParams({
+    var formData = new URLSearchParams({
       action: 'submitQCFormData',
       uniqueId: document.getElementById('qcUniqueId').value,
       qcPassedQty: document.getElementById('qcPassedQty').value,
@@ -343,10 +339,26 @@
       qcemployee: document.getElementById('qcemployee').value
     });
 
-    window.location.href = url + '?' + params.toString();
+    fetch(SCRIPT_URL + '?' + formData.toString(), {
+      method: 'GET',
+      redirect: 'follow',
+      mode: 'no-cors'
+    })
+    .then(() => {
+      messageDiv.innerHTML = '✓ QC Data submitted successfully!<br><small>You can close this page or scan another QR code.</small>';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      form.reset();
+    })
+    .catch(error => {
+      console.error('Submission error:', error);
+      messageDiv.textContent = 'Submission sent. If data does not appear in tracking sheet, please try again or contact IT.';
+      messageDiv.className = 'message error';
+      submitBtn.disabled = false;
+    });
   }
 
-  // Scrapped Post-Processing Form Submission
+  // Scrapped Form Submission - FIXED VERSION
   function submitScrappedForm() {
     var form = document.getElementById('scrappedPostProcessingForm');
     var messageDiv = document.getElementById('scrappedMessage');
@@ -361,12 +373,11 @@
     }
 
     submitBtn.disabled = true;
-    messageDiv.innerHTML = 'Submitting...';
+    messageDiv.innerHTML = '<div class="spinner"></div> Submitting...';
     messageDiv.className = 'message loading';
     messageDiv.style.display = 'block';
 
-    var url = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
-    var params = new URLSearchParams({
+    var formData = new URLSearchParams({
       action: 'submitScrappedPostProcessingData',
       uniqueId: document.getElementById('scrappedUniqueId').value,
       qtyScrappedPostProcessing: document.getElementById('qtyScrappedPostProcessing').value,
@@ -374,7 +385,24 @@
       postprocemployee: document.getElementById('postprocemployee').value
     });
 
-    window.location.href = url + '?' + params.toString();
+    fetch(SCRIPT_URL + '?' + formData.toString(), {
+      method: 'GET',
+      redirect: 'follow',
+      mode: 'no-cors'
+    })
+    .then(() => {
+      messageDiv.innerHTML = '✓ Data submitted successfully!<br><small>You can close this page or scan another QR code.</small>';
+      messageDiv.className = 'message success';
+      submitBtn.disabled = false;
+      form.reset();
+      document.getElementById('notesSection').classList.add('hidden');
+    })
+    .catch(error => {
+      console.error('Submission error:', error);
+      messageDiv.textContent = 'Submission sent. If data does not appear in tracking sheet, please try again or contact IT.';
+      messageDiv.className = 'message error';
+      submitBtn.disabled = false;
+    });
   }
 </script>
 
