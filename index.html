@@ -559,25 +559,19 @@
       })
     };
 
+    // Use text/plain to avoid CORS preflight (application/json triggers preflight
+    // which Apps Script does not support from cross-origin requests)
     return fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload),
+      mode: 'no-cors',
       redirect: 'follow'
     })
-    .then(function(response) {
-      // After redirect, Apps Script returns the JSON response
-      // With POST + redirect, we may get an opaque response
-      // Try to parse it; if it fails, assume success (similar to no-cors pattern)
-      return response.text().then(function(text) {
-        try {
-          return JSON.parse(text);
-        } catch (e) {
-          // If we can't parse (redirect issue), assume it went through
-          console.log('Could not parse response, assuming success. Response:', text.substring(0, 200));
-          return { success: true, message: 'Images sent (response not confirmed)' };
-        }
-      });
+    .then(function() {
+      // no-cors mode returns opaque response - we can't read it
+      // but if we get here, the request was sent successfully
+      return { success: true, message: 'Images sent' };
     });
   }
 
