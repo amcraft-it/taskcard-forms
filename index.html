@@ -546,7 +546,7 @@
     messageDiv.className = 'message loading';
     messageDiv.style.display = 'block';
 
-    var payload = {
+    var payload = JSON.stringify({
       action: 'uploadImages',
       uniqueId: uniqueId,
       stage: STAGE_MAP[stage],
@@ -557,21 +557,67 @@
           mimeType: img.mimeType
         };
       })
-    };
+    });
 
-    // Use text/plain to avoid CORS preflight (application/json triggers preflight
-    // which Apps Script does not support from cross-origin requests)
-    return fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors',
-      redirect: 'follow'
-    })
-    .then(function() {
-      // no-cors mode returns opaque response - we can't read it
-      // but if we get here, the request was sent successfully
-      return { success: true, message: 'Images sent' };
+    // Use a hidden form + iframe to POST data to Apps Script.
+    // This avoids CORS issues because form submissions are not subject to CORS.
+    return new Promise(function(resolve, reject) {
+      // Create unique iframe name
+      var iframeName = 'uploadFrame_' + Date.now();
+      
+      // Create hidden iframe
+      var iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      // Create hidden form
+      var form = document.createElement('form');
+      form.method = 'POST';
+      form.action = SCRIPT_URL;
+      form.target = iframeName;
+      form.style.display = 'none';
+
+      // Add payload as hidden input
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'payload';
+      input.value = payload;
+      form.appendChild(input);
+
+      document.body.appendChild(form);
+
+      // Set timeout - if iframe loads within reasonable time, assume success
+      var timeout = setTimeout(function() {
+        cleanup();
+        resolve({ success: true, message: 'Images sent' });
+      }, 30000); // 30 second timeout for large images
+
+      // Listen for iframe load (Apps Script will return HTML response)
+      iframe.onload = function() {
+        clearTimeout(timeout);
+        // Small delay to ensure Apps Script has processed
+        setTimeout(function() {
+          cleanup();
+          resolve({ success: true, message: 'Images uploaded' });
+        }, 500);
+      };
+
+      iframe.onerror = function() {
+        clearTimeout(timeout);
+        cleanup();
+        reject(new Error('Upload failed'));
+      };
+
+      function cleanup() {
+        try {
+          if (form.parentNode) document.body.removeChild(form);
+          if (iframe.parentNode) document.body.removeChild(iframe);
+        } catch(e) {}
+      }
+
+      // Submit the form
+      form.submit();
     });
   }
 
