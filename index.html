@@ -12,207 +12,63 @@
       margin: 0 auto;
       padding: 20px;
     }
-    h1 {
-      color: #333;
-      font-size: 24px;
-    }
-    label { 
-      display: block; 
-      margin-top: 15px; 
-      font-weight: bold;
-      color: #555;
-    }
-    input[type="number"], 
-    input[type="text"],
-    input[type="datetime-local"], 
-    select, 
-    textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-      font-size: 16px;
+    h1 { color: #333; font-size: 24px; }
+    label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+    input[type="number"], input[type="text"], input[type="datetime-local"], select, textarea {
+      width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd;
+      border-radius: 4px; box-sizing: border-box; font-size: 16px;
     }
     button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 20px;
-      width: 100%;
+      background-color: #4CAF50; color: white; padding: 12px 24px; border: none;
+      border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; width: 100%;
     }
-    button:hover {
-      background-color: #45a049;
-    }
-    button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-    .message { 
-      margin-top: 20px; 
-      padding: 10px;
-      border-radius: 4px;
-      text-align: center;
-      font-weight: bold;
-    }
-    .success { 
-      color: #155724;
-      background-color: #d4edda;
-      border: 1px solid #c3e6cb;
-    }
-    .error { 
-      color: #721c24;
-      background-color: #f8d7da;
-      border: 1px solid #f5c6cb;
-    }
-    .loading {
-      color: #004085;
-      background-color: #cce5ff;
-      border: 1px solid #b8daff;
-    }
-    .hidden { 
-      display: none; 
-    }
+    button:hover { background-color: #45a049; }
+    button:disabled { background-color: #cccccc; cursor: not-allowed; }
+    .message { margin-top: 20px; padding: 10px; border-radius: 4px; text-align: center; font-weight: bold; }
+    .success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+    .error { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+    .loading { color: #004085; background-color: #cce5ff; border: 1px solid #b8daff; }
+    .hidden { display: none; }
     .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(0,0,0,.1);
-      border-radius: 50%;
-      border-top-color: #007bff;
-      animation: spin 1s ease-in-out infinite;
+      display: inline-block; width: 20px; height: 20px;
+      border: 3px solid rgba(0,0,0,.1); border-radius: 50%;
+      border-top-color: #007bff; animation: spin 1s ease-in-out infinite;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ===== IMAGE UPLOAD STYLES ===== */
+    @keyframes spin { to { transform: rotate(360deg); } }
     .image-upload-section {
-      margin-top: 15px;
-      padding: 15px;
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      background: #f9f9f9;
+      margin-top: 15px; padding: 15px; border: 2px dashed #ccc;
+      border-radius: 8px; background: #f9f9f9;
     }
-    .image-upload-section.required {
-      border-color: #e0a800;
-      background: #fff9e6;
-    }
-    .image-upload-label {
-      display: block;
-      font-weight: bold;
-      color: #555;
-      margin-bottom: 10px;
-      font-size: 15px;
-    }
-    .image-upload-label .optional-tag {
-      font-weight: normal;
-      color: #999;
-      font-size: 13px;
-    }
-    .image-upload-label .required-tag {
-      font-weight: normal;
-      color: #d32f2f;
-      font-size: 13px;
-    }
-    .image-btn-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    .image-upload-section.required { border-color: #e0a800; background: #fff9e6; }
+    .image-upload-label { display: block; font-weight: bold; color: #555; margin-bottom: 10px; font-size: 15px; }
+    .image-upload-label .optional-tag { font-weight: normal; color: #999; font-size: 13px; }
+    .image-upload-label .required-tag { font-weight: normal; color: #d32f2f; font-size: 13px; }
+    .image-btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
     .image-btn {
-      flex: 1;
-      padding: 12px 10px;
-      border: 2px solid #0E1165;
-      border-radius: 6px;
-      background: white;
-      color: #0E1165;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      text-align: center;
-      margin-top: 0;
-      width: auto;
+      flex: 1; padding: 12px 10px; border: 2px solid #0E1165; border-radius: 6px;
+      background: white; color: #0E1165; font-size: 14px; font-weight: bold;
+      cursor: pointer; text-align: center; margin-top: 0; width: auto;
     }
-    .image-btn:hover {
-      background: #0E1165;
-      color: white;
-    }
-    .image-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .image-btn .btn-icon {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 3px;
-    }
-    .image-preview-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
+    .image-btn:hover { background: #0E1165; color: white; }
+    .image-btn .btn-icon { display: block; font-size: 22px; margin-bottom: 3px; }
+    .image-preview-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .image-preview-item {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #ddd;
+      position: relative; width: 100px; height: 100px;
+      border-radius: 6px; overflow: hidden; border: 1px solid #ddd;
     }
-    .image-preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
     .image-preview-item .remove-btn {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background: rgba(220, 53, 69, 0.9);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      margin: 0;
-      line-height: 1;
+      position: absolute; top: 2px; right: 2px; background: rgba(220,53,69,0.9);
+      color: white; border: none; border-radius: 50%; width: 24px; height: 24px;
+      font-size: 14px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; padding: 0; margin: 0; line-height: 1;
     }
-    .image-preview-item .remove-btn:hover {
-      background: #dc3545;
-    }
-    .image-count {
-      font-size: 13px;
-      color: #666;
-      margin-top: 5px;
-    }
-    .image-upload-progress {
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-    /* Hidden file inputs */
-    .file-input-hidden {
-      display: none !important;
-    }
+    .image-count { font-size: 13px; color: #666; margin-top: 5px; }
+    .file-input-hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-<!-- Error Page (no ID provided) -->
 <div id="errorPage" class="hidden">
   <div style="padding: 20px; background: #ffebee; border-radius: 4px; text-align: center;">
     <h2 style="color: #d32f2f;">Error: No ID Provided</h2>
@@ -220,36 +76,24 @@
   </div>
 </div>
 
-<!-- ============================================ -->
-<!-- TASK CARD FORM (Print Stage)                 -->
-<!-- ============================================ -->
+<!-- TASK CARD FORM -->
 <div id="taskCardFormContainer" class="hidden">
   <h1>Enter Data for Task Card: <span id="taskCardId"></span></h1>
-  
   <form id="taskCardForm">
     <input type="hidden" id="taskUniqueId" name="uniqueId">
-    
     <label for="printerId">Printer ID:</label>
     <select id="printerId" name="printerId" required>
       <option value="">Select a Printer ID</option>
-      <option value="AM01">AM01</option>
-      <option value="AM02">AM02</option>
-      <option value="AM03">AM03</option>
-      <option value="AM04">AM04</option>
-      <option value="AMCRP107">AMCRP107</option>
-      <option value="AMCRP108">AMCRP108</option>
-      <option value="AM05">AM05</option>
-      <option value="AM06">AM06</option>
-      <option value="AM14">AM14</option>
-      <option value="AM15">AM15</option> 
-      <option value="PD01">PD01</option>
-      <option value="PD02">PD02</option>
+      <option value="AM01">AM01</option><option value="AM02">AM02</option>
+      <option value="AM03">AM03</option><option value="AM04">AM04</option>
+      <option value="AMCRP107">AMCRP107</option><option value="AMCRP108">AMCRP108</option>
+      <option value="AM05">AM05</option><option value="AM06">AM06</option>
+      <option value="AM14">AM14</option><option value="AM15">AM15</option>
+      <option value="PD01">PD01</option><option value="PD02">PD02</option>
       <option value="PD05">PD05</option>
     </select>
-    
     <label for="qtyTaskCard">Qty per Task Card:</label>
     <input type="number" id="qtyTaskCard" name="qtyTaskCard" min="0" required>
-
     <label for="taskCardStatus">Task Card Status:</label>
     <select id="taskCardStatus" name="taskCardStatus" required>
       <option value="">Select Status</option>
@@ -257,385 +101,170 @@
       <option value="Parts partially printed">Parts partially printed</option>
       <option value="Failed print">Failed print</option>
     </select>
-
     <label for="qtySuccessful">Qty Successful:</label>
     <input type="number" id="qtySuccessful" name="qtySuccessful" min="0" required>
-
     <label for="qtyScrapped">QTY Scrapped at This Current Stage:</label>
     <input type="number" id="qtyScrapped" name="qtyScrapped" min="0" required>
-
     <label for="dateTimeFinished">Date and Time Finished:</label>
     <input type="datetime-local" id="dateTimeFinished" name="dateTimeFinished" required>
-
     <label for="notes">Notes:</label>
     <textarea id="notes" name="notes" rows="3" required></textarea>
-
     <label for="operatorname">Operator name:</label>
     <input type="text" id="operatorname" name="operatorname" required>
-
-    <!-- IMAGE UPLOAD - OPTIONAL FOR PRINT STAGE -->
     <div class="image-upload-section" id="taskImageSection">
-      <span class="image-upload-label">
-        Photo documentation <span class="optional-tag">(optional)</span>
-      </span>
+      <span class="image-upload-label">Photo documentation <span class="optional-tag">(optional)</span></span>
       <div class="image-btn-row">
-        <button type="button" class="image-btn" onclick="openCamera('task')">
-          <span class="btn-icon">&#128247;</span> Take Photo
-        </button>
-        <button type="button" class="image-btn" onclick="openGallery('task')">
-          <span class="btn-icon">&#128193;</span> Choose File
-        </button>
+        <button type="button" class="image-btn" onclick="openCamera('task')"><span class="btn-icon">&#128247;</span> Take Photo</button>
+        <button type="button" class="image-btn" onclick="openGallery('task')"><span class="btn-icon">&#128193;</span> Choose File</button>
       </div>
-      <!-- Hidden file inputs -->
       <input type="file" accept="image/*" capture="environment" class="file-input-hidden" id="taskCameraInput" onchange="handleFiles(this, 'task')">
       <input type="file" accept="image/*" multiple class="file-input-hidden" id="taskGalleryInput" onchange="handleFiles(this, 'task')">
-      <!-- Preview area -->
       <div class="image-preview-grid" id="taskImagePreview"></div>
       <div class="image-count" id="taskImageCount"></div>
     </div>
-
     <button type="button" id="taskSubmitBtn" onclick="submitTaskForm()">Submit</button>
-    
     <div id="taskMessage" class="message" style="display:none;"></div>
   </form>
 </div>
 
-<!-- ============================================ -->
-<!-- QC FORM                                      -->
-<!-- ============================================ -->
+<!-- QC FORM -->
 <div id="qcFormContainer" class="hidden">
   <h1>Enter QC Data for Task Card: <span id="qcTaskCardId"></span></h1>
-  
   <form id="qcForm">
     <input type="hidden" id="qcUniqueId" name="uniqueId">
-    
     <label for="qcPassedQty">QC Passed QTY:</label>
     <input type="number" id="qcPassedQty" name="qcPassedQty" min="0" required>
-
     <label for="totalScrappedQty">QTY Scrapped During QC:</label>
     <input type="number" id="totalScrappedQty" name="totalScrappedQty" min="0" required>
-
     <label for="storedForFuture">Stored for Future:</label>
     <input type="number" id="storedForFuture" name="storedForFuture" min="0" required>
-
     <label for="qcNotes">QC Notes:</label>
     <textarea id="qcNotes" name="qcNotes" rows="3" required></textarea>
-
     <label for="qcemployee">Employee:</label>
     <input type="text" id="qcemployee" name="qcemployee" required>
-
-    <!-- IMAGE UPLOAD - REQUIRED FOR QC STAGE (min 1 photo) -->
     <div class="image-upload-section required" id="qcImageSection">
-      <span class="image-upload-label">
-        QC Photo documentation <span class="required-tag">(minimum 1 photo required)</span>
-      </span>
+      <span class="image-upload-label">QC Photo documentation <span class="required-tag">(minimum 1 photo required)</span></span>
       <div class="image-btn-row">
-        <button type="button" class="image-btn" onclick="openCamera('qc')">
-          <span class="btn-icon">&#128247;</span> Take Photo
-        </button>
-        <button type="button" class="image-btn" onclick="openGallery('qc')">
-          <span class="btn-icon">&#128193;</span> Choose File
-        </button>
+        <button type="button" class="image-btn" onclick="openCamera('qc')"><span class="btn-icon">&#128247;</span> Take Photo</button>
+        <button type="button" class="image-btn" onclick="openGallery('qc')"><span class="btn-icon">&#128193;</span> Choose File</button>
       </div>
-      <!-- Hidden file inputs -->
       <input type="file" accept="image/*" capture="environment" class="file-input-hidden" id="qcCameraInput" onchange="handleFiles(this, 'qc')">
       <input type="file" accept="image/*" multiple class="file-input-hidden" id="qcGalleryInput" onchange="handleFiles(this, 'qc')">
-      <!-- Preview area -->
       <div class="image-preview-grid" id="qcImagePreview"></div>
       <div class="image-count" id="qcImageCount"></div>
     </div>
-
     <button type="button" id="qcSubmitBtn" onclick="submitQCFormData()">Submit</button>
-
     <div id="qcMessage" class="message" style="display:none;"></div>
   </form>
 </div>
 
-<!-- ============================================ -->
-<!-- SCRAPPED POST-PROCESSING FORM                -->
-<!-- ============================================ -->
+<!-- SCRAPPED FORM -->
 <div id="scrappedFormContainer" class="hidden">
   <h1>Enter Scrapped Qty After Support Removal for Task Card: <span id="scrappedTaskCardId"></span></h1>
-  
   <form id="scrappedPostProcessingForm">
     <input type="hidden" id="scrappedUniqueId" name="uniqueId">
-    
     <label for="qtyScrappedPostProcessing">QTY Scrapped After Support Removal:</label>
     <input type="number" id="qtyScrappedPostProcessing" name="qtyScrappedPostProcessing" min="0" required>
-
     <div id="notesSection" class="hidden">
       <label for="scrappedNotes">Reason for scrap:</label>
       <textarea id="scrappedNotes" name="notes" rows="3"></textarea>
     </div>
-
     <label for="postprocemployee">Employee:</label>
     <input type="text" id="postprocemployee" name="postprocemployee" required>
-
-    <!-- IMAGE UPLOAD - OPTIONAL FOR POST-PROCESSING -->
     <div class="image-upload-section" id="scrappedImageSection">
-      <span class="image-upload-label">
-        Photo documentation <span class="optional-tag">(optional)</span>
-      </span>
+      <span class="image-upload-label">Photo documentation <span class="optional-tag">(optional)</span></span>
       <div class="image-btn-row">
-        <button type="button" class="image-btn" onclick="openCamera('scrapped')">
-          <span class="btn-icon">&#128247;</span> Take Photo
-        </button>
-        <button type="button" class="image-btn" onclick="openGallery('scrapped')">
-          <span class="btn-icon">&#128193;</span> Choose File
-        </button>
+        <button type="button" class="image-btn" onclick="openCamera('scrapped')"><span class="btn-icon">&#128247;</span> Take Photo</button>
+        <button type="button" class="image-btn" onclick="openGallery('scrapped')"><span class="btn-icon">&#128193;</span> Choose File</button>
       </div>
-      <!-- Hidden file inputs -->
       <input type="file" accept="image/*" capture="environment" class="file-input-hidden" id="scrappedCameraInput" onchange="handleFiles(this, 'scrapped')">
       <input type="file" accept="image/*" multiple class="file-input-hidden" id="scrappedGalleryInput" onchange="handleFiles(this, 'scrapped')">
-      <!-- Preview area -->
       <div class="image-preview-grid" id="scrappedImagePreview"></div>
       <div class="image-count" id="scrappedImageCount"></div>
     </div>
-
     <button type="button" id="scrappedSubmitBtn" onclick="submitScrappedForm()">Submit</button>
-    
     <div id="scrappedMessage" class="message" style="display:none;"></div>
   </form>
 </div>
 
 <script>
-  // =============================================
-  // CONFIGURATION
-  // =============================================
-  
-  // IMPORTANT: Replace with your actual Apps Script Web App URL
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxp0b31Ko_QVEKgHgFXwHmZytABZ5sl5uDVD206KC83y-dtG6MKIEejR0R1sD9EVogGzw/exec';
+  var STAGE_MAP = { 'task': 'print', 'qc': 'qc', 'scrapped': 'postprocessing' };
+  var imageStore = { task: [], qc: [], scrapped: [] };
 
-  // Stage name mapping for backend
-  const STAGE_MAP = {
-    'task': 'print',
-    'qc': 'qc',
-    'scrapped': 'postprocessing'
-  };
+  function openCamera(s) { document.getElementById(s + 'CameraInput').click(); }
+  function openGallery(s) { document.getElementById(s + 'GalleryInput').click(); }
 
-  // =============================================
-  // IMAGE STORAGE - holds base64 data per stage
-  // =============================================
-  const imageStore = {
-    task: [],      // [{data: base64, name: filename, mimeType: 'image/jpeg', previewUrl: blobUrl}]
-    qc: [],
-    scrapped: []
-  };
-
-  // =============================================
-  // IMAGE HANDLING FUNCTIONS
-  // =============================================
-
-  /**
-   * Open device camera (mobile) or file picker for single photo
-   */
-  function openCamera(stage) {
-    document.getElementById(stage + 'CameraInput').click();
-  }
-
-  /**
-   * Open file picker / gallery for multiple images
-   */
-  function openGallery(stage) {
-    document.getElementById(stage + 'GalleryInput').click();
-  }
-
-  /**
-   * Handle selected files from camera or gallery
-   */
   function handleFiles(input, stage) {
     var files = input.files;
     if (!files || files.length === 0) return;
-
     for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      
-      // Validate it's an image
-      if (!file.type.startsWith('image/')) {
-        alert('Please select only image files.');
-        continue;
-      }
-
-      // Read file as base64
       (function(f) {
+        if (!f.type.startsWith('image/')) return;
         var reader = new FileReader();
         reader.onload = function(e) {
-          var base64Full = e.target.result; // "data:image/jpeg;base64,..."
-          var base64Data = base64Full.split(',')[1]; // just the base64 part
-          var previewUrl = URL.createObjectURL(f);
-
           imageStore[stage].push({
-            data: base64Data,
-            name: f.name,
-            mimeType: f.type || 'image/jpeg',
-            previewUrl: previewUrl
+            data: e.target.result.split(',')[1],
+            name: f.name, mimeType: f.type || 'image/jpeg',
+            previewUrl: URL.createObjectURL(f)
           });
-
-          renderImagePreviews(stage);
+          renderPreviews(stage);
         };
         reader.readAsDataURL(f);
-      })(file);
+      })(files[i]);
     }
-
-    // Reset the input so the same file can be selected again
     input.value = '';
   }
 
-  /**
-   * Render image preview thumbnails
-   */
-  function renderImagePreviews(stage) {
-    var previewContainer = document.getElementById(stage + 'ImagePreview');
-    var countContainer = document.getElementById(stage + 'ImageCount');
-    var images = imageStore[stage];
-
-    // Clear existing previews
-    previewContainer.innerHTML = '';
-
-    images.forEach(function(img, index) {
-      var item = document.createElement('div');
-      item.className = 'image-preview-item';
-
-      var imgEl = document.createElement('img');
-      imgEl.src = img.previewUrl;
-      imgEl.alt = 'Photo ' + (index + 1);
-      item.appendChild(imgEl);
-
-      var removeBtn = document.createElement('button');
-      removeBtn.className = 'remove-btn';
-      removeBtn.type = 'button';
-      removeBtn.innerHTML = '&times;';
-      removeBtn.onclick = (function(idx, stg) {
-        return function() { removeImage(stg, idx); };
-      })(index, stage);
-      item.appendChild(removeBtn);
-
-      previewContainer.appendChild(item);
+  function renderPreviews(stage) {
+    var c = document.getElementById(stage + 'ImagePreview');
+    var n = document.getElementById(stage + 'ImageCount');
+    c.innerHTML = '';
+    imageStore[stage].forEach(function(img, idx) {
+      var d = document.createElement('div'); d.className = 'image-preview-item';
+      var im = document.createElement('img'); im.src = img.previewUrl; d.appendChild(im);
+      var b = document.createElement('button');
+      b.className = 'remove-btn'; b.type = 'button'; b.innerHTML = '&times;';
+      b.onclick = function() {
+        URL.revokeObjectURL(imageStore[stage][idx].previewUrl);
+        imageStore[stage].splice(idx, 1); renderPreviews(stage);
+      };
+      d.appendChild(b); c.appendChild(d);
     });
-
-    // Update count text
-    if (images.length > 0) {
-      countContainer.textContent = images.length + ' photo' + (images.length > 1 ? 's' : '') + ' selected';
-    } else {
-      countContainer.textContent = '';
-    }
+    n.textContent = imageStore[stage].length > 0 ? imageStore[stage].length + ' photo(s) selected' : '';
   }
 
-  /**
-   * Remove an image from the store
-   */
-  function removeImage(stage, index) {
-    // Revoke the blob URL to free memory
-    URL.revokeObjectURL(imageStore[stage][index].previewUrl);
-    imageStore[stage].splice(index, 1);
-    renderImagePreviews(stage);
-  }
-
-  /**
-   * Upload images to Google Drive via Apps Script
-   * Returns a promise
-   */
-  function uploadImages(stage, uniqueId, messageDiv) {
-    var images = imageStore[stage];
-    
-    if (images.length === 0) {
-      return Promise.resolve({ success: true, message: 'No images to upload' });
-    }
-
-    messageDiv.innerHTML = '<div class="spinner"></div> Uploading ' + images.length + ' photo(s)...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
+  // Fire-and-forget image upload via hidden form + iframe (no CORS issues)
+  function uploadImages(stage, uniqueId) {
+    if (imageStore[stage].length === 0) return;
     var payload = JSON.stringify({
-      action: 'uploadImages',
-      uniqueId: uniqueId,
-      stage: STAGE_MAP[stage],
-      images: images.map(function(img) {
-        return {
-          data: img.data,
-          name: img.name,
-          mimeType: img.mimeType
-        };
+      action: 'uploadImages', uniqueId: uniqueId, stage: STAGE_MAP[stage],
+      images: imageStore[stage].map(function(img) {
+        return { data: img.data, name: img.name, mimeType: img.mimeType };
       })
     });
-
-    // Use a hidden form + iframe to POST data to Apps Script.
-    // This avoids CORS issues because form submissions are not subject to CORS.
-    return new Promise(function(resolve, reject) {
-      // Create unique iframe name
-      var iframeName = 'uploadFrame_' + Date.now();
-      
-      // Create hidden iframe
-      var iframe = document.createElement('iframe');
-      iframe.name = iframeName;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-
-      // Create hidden form
-      var form = document.createElement('form');
-      form.method = 'POST';
-      form.action = SCRIPT_URL;
-      form.target = iframeName;
-      form.style.display = 'none';
-
-      // Add payload as hidden input
-      var input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'payload';
-      input.value = payload;
-      form.appendChild(input);
-
-      document.body.appendChild(form);
-
-      // Set timeout - if iframe loads within reasonable time, assume success
-      var timeout = setTimeout(function() {
-        cleanup();
-        resolve({ success: true, message: 'Images sent' });
-      }, 30000); // 30 second timeout for large images
-
-      // Listen for iframe load (Apps Script will return HTML response)
-      iframe.onload = function() {
-        clearTimeout(timeout);
-        // Small delay to ensure Apps Script has processed
-        setTimeout(function() {
-          cleanup();
-          resolve({ success: true, message: 'Images uploaded' });
-        }, 500);
-      };
-
-      iframe.onerror = function() {
-        clearTimeout(timeout);
-        cleanup();
-        reject(new Error('Upload failed'));
-      };
-
-      function cleanup() {
-        try {
-          if (form.parentNode) document.body.removeChild(form);
-          if (iframe.parentNode) document.body.removeChild(iframe);
-        } catch(e) {}
-      }
-
-      // Submit the form
-      form.submit();
-    });
+    var fn = 'uf_' + Date.now();
+    var iframe = document.createElement('iframe');
+    iframe.name = fn; iframe.style.display = 'none'; document.body.appendChild(iframe);
+    var form = document.createElement('form');
+    form.method = 'POST'; form.action = SCRIPT_URL; form.target = fn; form.style.display = 'none';
+    var inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = 'payload'; inp.value = payload;
+    form.appendChild(inp); document.body.appendChild(form);
+    setTimeout(function() {
+      try { document.body.removeChild(form); } catch(e) {}
+      try { document.body.removeChild(iframe); } catch(e) {}
+    }, 60000);
+    form.submit();
   }
 
-
-  // =============================================
-  // URL PARAMS & PAGE INIT
-  // =============================================
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const uniqueId = urlParams.get('id');
-  const pageType = urlParams.get('page') || 'task';
+  // Page init
+  var urlParams = new URLSearchParams(window.location.search);
+  var uniqueId = urlParams.get('id');
+  var pageType = urlParams.get('page') || 'task';
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (!uniqueId) {
-      document.getElementById('errorPage').classList.remove('hidden');
-      return;
-    }
-
+    if (!uniqueId) { document.getElementById('errorPage').classList.remove('hidden'); return; }
     if (pageType === 'qc') {
       document.getElementById('qcFormContainer').classList.remove('hidden');
       document.getElementById('qcTaskCardId').textContent = uniqueId;
@@ -644,19 +273,10 @@
       document.getElementById('scrappedFormContainer').classList.remove('hidden');
       document.getElementById('scrappedTaskCardId').textContent = uniqueId;
       document.getElementById('scrappedUniqueId').value = uniqueId;
-      
       document.getElementById('qtyScrappedPostProcessing').addEventListener('input', function() {
-        var notesSection = document.getElementById('notesSection');
-        var notesField = document.getElementById('scrappedNotes');
-
-        if (parseInt(this.value) > 0) {
-          notesSection.classList.remove('hidden');
-          notesField.setAttribute('required', 'true');
-        } else {
-          notesSection.classList.add('hidden');
-          notesField.removeAttribute('required');
-          notesField.value = '';
-        }
+        var ns = document.getElementById('notesSection'), nf = document.getElementById('scrappedNotes');
+        if (parseInt(this.value) > 0) { ns.classList.remove('hidden'); nf.required = true; }
+        else { ns.classList.add('hidden'); nf.required = false; nf.value = ''; }
       });
     } else {
       document.getElementById('taskCardFormContainer').classList.remove('hidden');
@@ -666,211 +286,74 @@
     }
   });
 
+  // === SUBMIT FUNCTIONS ===
+  // Key design: form data via GET fetch + images via iframe POST run INDEPENDENTLY
 
-  // =============================================
-  // FORM SUBMISSIONS (updated with image upload)
-  // =============================================
-
-  /**
-   * Task Card Form - submit data then upload images
-   */
   function submitTaskForm() {
     var form = document.getElementById('taskCardForm');
-    var messageDiv = document.getElementById('taskMessage');
-    var submitBtn = document.getElementById('taskSubmitBtn');
-
-    if (!form.checkValidity()) {
-      messageDiv.textContent = 'Please fill all fields before submitting.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      form.reportValidity();
-      return;
-    }
-
-    submitBtn.disabled = true;
-    messageDiv.innerHTML = '<div class="spinner"></div> Submitting form data...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
+    var msg = document.getElementById('taskMessage');
+    var btn = document.getElementById('taskSubmitBtn');
+    if (!form.checkValidity()) { msg.textContent = 'Please fill all fields.'; msg.className = 'message error'; msg.style.display = 'block'; form.reportValidity(); return; }
+    btn.disabled = true; msg.innerHTML = '<div class="spinner"></div> Submitting...'; msg.className = 'message loading'; msg.style.display = 'block';
     var tcId = document.getElementById('taskUniqueId').value;
-    var hasImages = imageStore.task.length > 0;
-    var imageCount = imageStore.task.length;
-
-    // Submit form data via GET (existing working flow)
-    var formData = new URLSearchParams({
-      action: 'submitFormData',
-      uniqueId: tcId,
-      printerId: document.getElementById('printerId').value,
-      qtyTaskCard: document.getElementById('qtyTaskCard').value,
-      taskCardStatus: document.getElementById('taskCardStatus').value,
-      qtySuccessful: document.getElementById('qtySuccessful').value,
-      qtyScrapped: document.getElementById('qtyScrapped').value,
-      dateTimeFinished: document.getElementById('dateTimeFinished').value,
-      notes: document.getElementById('notes').value,
-      operatorname: document.getElementById('operatorname').value
-    });
-
-    // Start image upload independently (don't chain on form data promise)
-    if (hasImages) {
-      uploadImages('task', tcId, messageDiv);
-    }
-
-    fetch(SCRIPT_URL + '?' + formData.toString(), {
-      method: 'GET',
-      redirect: 'follow',
-      mode: 'no-cors'
-    })
+    var ic = imageStore.task.length;
+    if (ic > 0) uploadImages('task', tcId);
+    var fd = new URLSearchParams({ action: 'submitFormData', uniqueId: tcId,
+      printerId: document.getElementById('printerId').value, qtyTaskCard: document.getElementById('qtyTaskCard').value,
+      taskCardStatus: document.getElementById('taskCardStatus').value, qtySuccessful: document.getElementById('qtySuccessful').value,
+      qtyScrapped: document.getElementById('qtyScrapped').value, dateTimeFinished: document.getElementById('dateTimeFinished').value,
+      notes: document.getElementById('notes').value, operatorname: document.getElementById('operatorname').value });
+    fetch(SCRIPT_URL + '?' + fd.toString(), { method: 'GET', redirect: 'follow', mode: 'no-cors' })
     .then(function() {
-      var photoText = hasImages ? ' + ' + imageCount + ' photo(s) uploading...' : '';
-      messageDiv.innerHTML = '&#10003; Data submitted successfully!' + photoText + 
-        '<br><small>You can close this page or scan another QR code.</small>';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
-      form.reset();
-      imageStore.task = [];
-      renderImagePreviews('task');
+      msg.innerHTML = '&#10003; Data submitted!' + (ic > 0 ? ' + ' + ic + ' photo(s) uploading...' : '') + '<br><small>You can close this page.</small>';
+      msg.className = 'message success'; btn.disabled = false; form.reset();
+      imageStore.task = []; renderPreviews('task');
       document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
-    })
-    .catch(function(error) {
-      console.error('Submission error:', error);
-      messageDiv.textContent = 'Error during submission. Please try again or contact IT.';
-      messageDiv.className = 'message error';
-      submitBtn.disabled = false;
-    });
+    }).catch(function(e) { console.error(e); msg.textContent = 'Submission sent. Check tracking sheet.'; msg.className = 'message error'; btn.disabled = false; });
   }
 
-  /**
-   * QC Form - requires at least 1 photo
-   */
   function submitQCFormData() {
     var form = document.getElementById('qcForm');
-    var messageDiv = document.getElementById('qcMessage');
-    var submitBtn = document.getElementById('qcSubmitBtn');
-
-    if (!form.checkValidity()) {
-      messageDiv.textContent = 'Please fill all fields before submitting.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      form.reportValidity();
-      return;
-    }
-
-    // QC requires at least 1 photo
-    if (imageStore.qc.length === 0) {
-      messageDiv.textContent = 'At least 1 photo is required for QC submission. Please take or choose a photo.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      document.getElementById('qcImageSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
-
-    submitBtn.disabled = true;
-    messageDiv.innerHTML = '<div class="spinner"></div> Submitting QC data...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
+    var msg = document.getElementById('qcMessage');
+    var btn = document.getElementById('qcSubmitBtn');
+    if (!form.checkValidity()) { msg.textContent = 'Please fill all fields.'; msg.className = 'message error'; msg.style.display = 'block'; form.reportValidity(); return; }
+    if (imageStore.qc.length === 0) { msg.textContent = 'At least 1 photo required for QC.'; msg.className = 'message error'; msg.style.display = 'block'; document.getElementById('qcImageSection').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    btn.disabled = true; msg.innerHTML = '<div class="spinner"></div> Submitting QC data...'; msg.className = 'message loading'; msg.style.display = 'block';
     var tcId = document.getElementById('qcUniqueId').value;
-    var imageCount = imageStore.qc.length;
-
-    // Start image upload independently (don't chain on form data promise)
-    uploadImages('qc', tcId, messageDiv);
-
-    // Submit form data via GET (existing working flow)
-    var formData = new URLSearchParams({
-      action: 'submitQCFormData',
-      uniqueId: tcId,
-      qcPassedQty: document.getElementById('qcPassedQty').value,
-      totalScrappedQty: document.getElementById('totalScrappedQty').value,
-      storedForFuture: document.getElementById('storedForFuture').value,
-      qcNotes: document.getElementById('qcNotes').value,
-      qcemployee: document.getElementById('qcemployee').value
-    });
-
-    fetch(SCRIPT_URL + '?' + formData.toString(), {
-      method: 'GET',
-      redirect: 'follow',
-      mode: 'no-cors'
-    })
+    var ic = imageStore.qc.length;
+    uploadImages('qc', tcId);
+    var fd = new URLSearchParams({ action: 'submitQCFormData', uniqueId: tcId,
+      qcPassedQty: document.getElementById('qcPassedQty').value, totalScrappedQty: document.getElementById('totalScrappedQty').value,
+      storedForFuture: document.getElementById('storedForFuture').value, qcNotes: document.getElementById('qcNotes').value,
+      qcemployee: document.getElementById('qcemployee').value });
+    fetch(SCRIPT_URL + '?' + fd.toString(), { method: 'GET', redirect: 'follow', mode: 'no-cors' })
     .then(function() {
-      messageDiv.innerHTML = '&#10003; QC Data submitted + ' + imageCount + ' photo(s) uploading!' + 
-        '<br><small>You can close this page or scan another QR code.</small>';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
-      form.reset();
-      imageStore.qc = [];
-      renderImagePreviews('qc');
-    })
-    .catch(function(error) {
-      console.error('Submission error:', error);
-      messageDiv.textContent = 'Error during submission. Please try again or contact IT.';
-      messageDiv.className = 'message error';
-      submitBtn.disabled = false;
-    });
+      msg.innerHTML = '&#10003; QC Data submitted + ' + ic + ' photo(s) uploading!<br><small>You can close this page.</small>';
+      msg.className = 'message success'; btn.disabled = false; form.reset();
+      imageStore.qc = []; renderPreviews('qc');
+    }).catch(function(e) { console.error(e); msg.textContent = 'Submission sent. Check tracking sheet.'; msg.className = 'message error'; btn.disabled = false; });
   }
 
-  /**
-   * Scrapped Post-Processing Form - images optional
-   */
   function submitScrappedForm() {
     var form = document.getElementById('scrappedPostProcessingForm');
-    var messageDiv = document.getElementById('scrappedMessage');
-    var submitBtn = document.getElementById('scrappedSubmitBtn');
-
-    if (!form.checkValidity()) {
-      messageDiv.textContent = 'Please fill all fields before submitting.';
-      messageDiv.className = 'message error';
-      messageDiv.style.display = 'block';
-      form.reportValidity();
-      return;
-    }
-
-    submitBtn.disabled = true;
-    messageDiv.innerHTML = '<div class="spinner"></div> Submitting data...';
-    messageDiv.className = 'message loading';
-    messageDiv.style.display = 'block';
-
+    var msg = document.getElementById('scrappedMessage');
+    var btn = document.getElementById('scrappedSubmitBtn');
+    if (!form.checkValidity()) { msg.textContent = 'Please fill all fields.'; msg.className = 'message error'; msg.style.display = 'block'; form.reportValidity(); return; }
+    btn.disabled = true; msg.innerHTML = '<div class="spinner"></div> Submitting...'; msg.className = 'message loading'; msg.style.display = 'block';
     var tcId = document.getElementById('scrappedUniqueId').value;
-    var hasImages = imageStore.scrapped.length > 0;
-    var imageCount = imageStore.scrapped.length;
-
-    // Start image upload independently (don't chain on form data promise)
-    if (hasImages) {
-      uploadImages('scrapped', tcId, messageDiv);
-    }
-
-    // Submit form data via GET (existing working flow)
-    var formData = new URLSearchParams({
-      action: 'submitScrappedPostProcessingData',
-      uniqueId: tcId,
+    var ic = imageStore.scrapped.length;
+    if (ic > 0) uploadImages('scrapped', tcId);
+    var fd = new URLSearchParams({ action: 'submitScrappedPostProcessingData', uniqueId: tcId,
       qtyScrappedPostProcessing: document.getElementById('qtyScrappedPostProcessing').value,
-      notes: document.getElementById('scrappedNotes').value,
-      postprocemployee: document.getElementById('postprocemployee').value
-    });
-
-    fetch(SCRIPT_URL + '?' + formData.toString(), {
-      method: 'GET',
-      redirect: 'follow',
-      mode: 'no-cors'
-    })
+      notes: document.getElementById('scrappedNotes').value, postprocemployee: document.getElementById('postprocemployee').value });
+    fetch(SCRIPT_URL + '?' + fd.toString(), { method: 'GET', redirect: 'follow', mode: 'no-cors' })
     .then(function() {
-      var photoText = hasImages ? ' + ' + imageCount + ' photo(s) uploading...' : '';
-      messageDiv.innerHTML = '&#10003; Data submitted successfully!' + photoText + 
-        '<br><small>You can close this page or scan another QR code.</small>';
-      messageDiv.className = 'message success';
-      submitBtn.disabled = false;
-      form.reset();
-      imageStore.scrapped = [];
-      renderImagePreviews('scrapped');
+      msg.innerHTML = '&#10003; Data submitted!' + (ic > 0 ? ' + ' + ic + ' photo(s) uploading...' : '') + '<br><small>You can close this page.</small>';
+      msg.className = 'message success'; btn.disabled = false; form.reset();
+      imageStore.scrapped = []; renderPreviews('scrapped');
       document.getElementById('notesSection').classList.add('hidden');
-    })
-    .catch(function(error) {
-      console.error('Submission error:', error);
-      messageDiv.textContent = 'Error during submission. Please try again or contact IT.';
-      messageDiv.className = 'message error';
-      submitBtn.disabled = false;
-    });
+    }).catch(function(e) { console.error(e); msg.textContent = 'Submission sent. Check tracking sheet.'; msg.className = 'message error'; btn.disabled = false; });
   }
 </script>
-
 </body>
 </html>
