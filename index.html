@@ -693,8 +693,10 @@
     messageDiv.style.display = 'block';
 
     var tcId = document.getElementById('taskUniqueId').value;
+    var hasImages = imageStore.task.length > 0;
+    var imageCount = imageStore.task.length;
 
-    // Step 1: Submit form data (existing flow)
+    // Submit form data via GET (existing working flow)
     var formData = new URLSearchParams({
       action: 'submitFormData',
       uniqueId: tcId,
@@ -708,22 +710,18 @@
       operatorname: document.getElementById('operatorname').value
     });
 
+    // Start image upload independently (don't chain on form data promise)
+    if (hasImages) {
+      uploadImages('task', tcId, messageDiv);
+    }
+
     fetch(SCRIPT_URL + '?' + formData.toString(), {
       method: 'GET',
       redirect: 'follow',
       mode: 'no-cors'
     })
     .then(function() {
-      // Step 2: Upload images if any
-      if (imageStore.task.length > 0) {
-        return uploadImages('task', tcId, messageDiv);
-      }
-      return { success: true, message: 'No images' };
-    })
-    .then(function(imgResult) {
-      var photoText = imageStore.task.length > 0 
-        ? ' + ' + imageStore.task.length + ' photo(s) uploaded' 
-        : '';
+      var photoText = hasImages ? ' + ' + imageCount + ' photo(s) uploading...' : '';
       messageDiv.innerHTML = '&#10003; Data submitted successfully!' + photoText + 
         '<br><small>You can close this page or scan another QR code.</small>';
       messageDiv.className = 'message success';
@@ -762,7 +760,6 @@
       messageDiv.textContent = 'At least 1 photo is required for QC submission. Please take or choose a photo.';
       messageDiv.className = 'message error';
       messageDiv.style.display = 'block';
-      // Scroll to image section
       document.getElementById('qcImageSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
@@ -773,8 +770,12 @@
     messageDiv.style.display = 'block';
 
     var tcId = document.getElementById('qcUniqueId').value;
+    var imageCount = imageStore.qc.length;
 
-    // Step 1: Submit form data
+    // Start image upload independently (don't chain on form data promise)
+    uploadImages('qc', tcId, messageDiv);
+
+    // Submit form data via GET (existing working flow)
     var formData = new URLSearchParams({
       action: 'submitQCFormData',
       uniqueId: tcId,
@@ -791,11 +792,7 @@
       mode: 'no-cors'
     })
     .then(function() {
-      // Step 2: Upload images (required for QC)
-      return uploadImages('qc', tcId, messageDiv);
-    })
-    .then(function(imgResult) {
-      messageDiv.innerHTML = '&#10003; QC Data submitted + ' + imageStore.qc.length + ' photo(s) uploaded!' + 
+      messageDiv.innerHTML = '&#10003; QC Data submitted + ' + imageCount + ' photo(s) uploading!' + 
         '<br><small>You can close this page or scan another QR code.</small>';
       messageDiv.className = 'message success';
       submitBtn.disabled = false;
@@ -833,8 +830,15 @@
     messageDiv.style.display = 'block';
 
     var tcId = document.getElementById('scrappedUniqueId').value;
+    var hasImages = imageStore.scrapped.length > 0;
+    var imageCount = imageStore.scrapped.length;
 
-    // Step 1: Submit form data
+    // Start image upload independently (don't chain on form data promise)
+    if (hasImages) {
+      uploadImages('scrapped', tcId, messageDiv);
+    }
+
+    // Submit form data via GET (existing working flow)
     var formData = new URLSearchParams({
       action: 'submitScrappedPostProcessingData',
       uniqueId: tcId,
@@ -849,16 +853,7 @@
       mode: 'no-cors'
     })
     .then(function() {
-      // Step 2: Upload images if any
-      if (imageStore.scrapped.length > 0) {
-        return uploadImages('scrapped', tcId, messageDiv);
-      }
-      return { success: true, message: 'No images' };
-    })
-    .then(function(imgResult) {
-      var photoText = imageStore.scrapped.length > 0 
-        ? ' + ' + imageStore.scrapped.length + ' photo(s) uploaded' 
-        : '';
+      var photoText = hasImages ? ' + ' + imageCount + ' photo(s) uploading...' : '';
       messageDiv.innerHTML = '&#10003; Data submitted successfully!' + photoText + 
         '<br><small>You can close this page or scan another QR code.</small>';
       messageDiv.className = 'message success';
