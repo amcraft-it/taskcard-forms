@@ -43,6 +43,9 @@
       cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; margin: 0; line-height: 1; }
     .image-count { font-size: 13px; color: #666; margin-top: 5px; }
     .file-input-hidden { display: none !important; }
+    .info { margin-top: 15px; padding: 10px 12px; border-radius: 4px; background: #eef3fb;
+      border: 1px solid #c5d5ee; color: #0E1165; line-height: 1.6; }
+    .info-error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
   </style>
 </head>
 <body>
@@ -117,9 +120,10 @@
   <h1>Enter QC Data for Task Card: <span id="qcTaskCardId"></span></h1>
   <form id="qcForm">
     <input type="hidden" id="qcUniqueId" name="uniqueId">
+    <div id="qcScrapInfo" class="info"></div>
     <label for="qcPassedQty">QC Passed QTY:</label>
     <input type="number" id="qcPassedQty" name="qcPassedQty" min="0" required>
-    <label for="totalScrappedQty">QTY Scrapped During QC:</label>
+    <label for="totalScrappedQty">Total QTY Scrapped (print + post-processing + QC):</label>
     <input type="number" id="totalScrappedQty" name="totalScrappedQty" min="0" required>
     <label for="storedForFuture">Stored for Future:</label>
     <input type="number" id="storedForFuture" name="storedForFuture" min="0" required>
@@ -254,6 +258,7 @@
       document.getElementById('qcFormContainer').classList.remove('hidden');
       document.getElementById('qcTaskCardId').textContent = uniqueId;
       document.getElementById('qcUniqueId').value = uniqueId;
+      loadScrapData(uniqueId);
     } else if (pageType === 'scrappedPostProcessing') {
       document.getElementById('scrappedFormContainer').classList.remove('hidden');
       document.getElementById('scrappedTaskCardId').textContent = uniqueId;
@@ -270,6 +275,53 @@
       document.getElementById('dateTimeFinished').value = new Date().toISOString().slice(0,16);
     }
   });
+
+  // === QC: load printing + post-processing scrap (JSONP, read-only) ===
+  var qcMinScrap = null;
+
+  function loadScrapData(id) {
+    var box = document.getElementById('qcScrapInfo');
+    var btn = document.getElementById('qcSubmitBtn');
+    btn.disabled = true;
+    box.className = 'info';
+    box.innerHTML = '<div class="spinner"></div> Loading previous scrap...';
+
+    var cb = 'scrapCb_' + Date.now();
+    var s = document.createElement('script');
+    var timer = setTimeout(function() { fail('timed out'); }, 15000);
+
+    function cleanup() {
+      clearTimeout(timer);
+      window[cb] = function() {};
+      if (s.parentNode) s.parentNode.removeChild(s);
+    }
+    function fail(why) {
+      cleanup();
+      box.className = 'info info-error';
+      box.textContent = 'Could not load printing / post-processing scrap (' + why + '). Reload the page before submitting.';
+    }
+
+    window[cb] = function(d) {
+      cleanup();
+      if (!d || !d.found) {
+        box.className = 'info info-error';
+        box.textContent = 'Task card ' + id + ' not found in TRACKING.';
+        return;
+      }
+      qcMinScrap = Number(d.minTotalScrap) || 0;
+      var p = d.printSubmitted ? String(Number(d.printScrap)) : 'not submitted yet';
+      var pp = d.postProcSubmitted ? String(Number(d.postProcScrap)) : 'not submitted yet';
+      box.innerHTML = 'Printing scrap: <b>' + p + '</b><br>' +
+                      'Post-processing scrap: <b>' + pp + '</b><br>' +
+                      'Minimum total scrapped: <b>' + qcMinScrap + '</b>';
+      document.getElementById('totalScrappedQty').min = qcMinScrap;
+      btn.disabled = false;
+    };
+
+    s.onerror = function() { fail('network error'); };
+    s.src = SCRIPT_URL + '?action=getScrapData&id=' + encodeURIComponent(id) + '&callback=' + cb;
+    document.body.appendChild(s);
+  }
 
   // === SUBMIT FUNCTIONS ===
   // Form data = GET fetch (existing working method)
@@ -303,6 +355,10 @@
     var msg = document.getElementById('qcMessage');
     var btn = document.getElementById('qcSubmitBtn');
     if (!form.checkValidity()) { msg.textContent = 'Please fill all fields.'; msg.className = 'message error'; msg.style.display = 'block'; form.reportValidity(); return; }
+    if (qcMinScrap === null) { msg.textContent = 'Scrap data not loaded. Reload the page.'; msg.className = 'message error'; msg.style.display = 'block'; return; }
+    var totalScrap = Number(document.getElementById('totalScrappedQty').value);
+    if (totalScrap < qcMinScrap) { msg.textContent = 'Total scrapped cannot be less than ' + qcMinScrap + ' (printing + post-processing scrap).'; msg.className = 'message error'; msg.style.display = 'block'; document.getElementById('totalScrappedQty').focus(); return; }
+    if (document.getElementById('qcNotes').value.trim() === '') { msg.textContent = 'QC Notes cannot be empty.'; msg.className = 'message error'; msg.style.display = 'block'; document.getElementById('qcNotes').focus(); return; }
     if (imageStore.qc.length === 0) { msg.textContent = 'At least 1 photo required for QC.'; msg.className = 'message error'; msg.style.display = 'block'; document.getElementById('qcImageSection').scrollIntoView({behavior:'smooth',block:'center'}); return; }
     btn.disabled = true; msg.innerHTML = '<div class="spinner"></div> Submitting QC data...'; msg.className = 'message loading'; msg.style.display = 'block';
     var tcId = document.getElementById('qcUniqueId').value;
