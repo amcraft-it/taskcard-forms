@@ -61,15 +61,22 @@
     <input type="hidden" id="taskUniqueId" name="uniqueId">
     <label for="printerId">Printer ID:</label>
     <select id="printerId" name="printerId" required>
-      <option value="">Select a Printer ID</option>
-      <option value="AM01">AM01</option><option value="AM02">AM02</option>
-      <option value="AM03">AM03</option><option value="AM04">AM04</option>
-      <option value="AMCRP107">AMCRP107</option><option value="AMCRP108">AMCRP108</option>
-      <option value="AM05">AM05</option><option value="AM06">AM06</option>
-      <option value="AM14">AM14</option><option value="AM15">AM15</option>
-      <option value="PD01">PD01</option><option value="PD02">PD02</option>
-      <option value="PD05">PD05</option>
-    </select>
+  <option value="">Select a Printer ID</option>
+  <optgroup label="F900">
+    <option value="AM01; SN:L2171 (F900)">AM01; SN:L2171 (F900)</option>
+    <option value="AM02; SN:L2161 (F900)">AM02; SN:L2161 (F900)</option>
+    <option value="AM03; SN:L2148 (F900)">AM03; SN:L2148 (F900)</option>
+    <option value="AM04; SN:L2160 (F900)">AM04; SN:L2160 (F900)</option>
+    <option value="AMCRP107; SN:L2505 (F900)">AMCRP107; SN:L2505 (F900)</option>
+    <option value="AMCRP108; SN:L2502 (F900)">AMCRP108; SN:L2502 (F900)</option>
+  </optgroup>
+  <optgroup label="F450">
+    <option value="AM05; SN:K00401 (F450)">AM05; SN:K00401 (F450)</option>
+    <option value="AM06; SN:K00402 (F450)">AM06; SN:K00402 (F450)</option>
+    <option value="AM14; SN:K10572 (F450)">AM14; SN:K10572 (F450)</option>
+    <option value="AM15; SN:K10573 (F450)">AM15; SN:K10573 (F450)</option>
+  </optgroup>
+</select>
     <label for="qtyTaskCard">Qty per Task Card:</label>
     <input type="number" id="qtyTaskCard" name="qtyTaskCard" min="0" required>
     <label for="taskCardStatus">Task Card Status:</label>
