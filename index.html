@@ -276,7 +276,7 @@
     }
   });
 
-  // === QC: load printing + post-processing scrap (JSONP, read-only) ===
+  // === QC: load printing + post-processing scrap (plain JSON fetch, read-only) ===
   var qcMinScrap = null;
 
   function loadScrapData(id) {
@@ -286,41 +286,43 @@
     box.className = 'info';
     box.innerHTML = '<div class="spinner"></div> Loading previous scrap...';
 
-    var cb = 'scrapCb_' + Date.now();
-    var s = document.createElement('script');
-    var timer = setTimeout(function() { fail('timed out'); }, 15000);
-
-    function cleanup() {
-      clearTimeout(timer);
-      window[cb] = function() {};
-      if (s.parentNode) s.parentNode.removeChild(s);
-    }
     function fail(why) {
-      cleanup();
       box.className = 'info info-error';
       box.textContent = 'Could not load printing / post-processing scrap (' + why + '). Reload the page before submitting.';
     }
 
-    window[cb] = function(d) {
-      cleanup();
-      if (!d || !d.found) {
-        box.className = 'info info-error';
-        box.textContent = 'Task card ' + id + ' not found in TRACKING.';
-        return;
-      }
-      qcMinScrap = Number(d.minTotalScrap) || 0;
-      var p = d.printSubmitted ? String(Number(d.printScrap)) : 'not submitted yet';
-      var pp = d.postProcSubmitted ? String(Number(d.postProcScrap)) : 'not submitted yet';
-      box.innerHTML = 'Printing scrap: <b>' + p + '</b><br>' +
-                      'Post-processing scrap: <b>' + pp + '</b><br>' +
-                      'Minimum total scrapped: <b>' + qcMinScrap + '</b>';
-      document.getElementById('totalScrappedQty').min = qcMinScrap;
-      btn.disabled = false;
-    };
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 20000);
+    var url = SCRIPT_URL + '?action=getScrapData&id=' + encodeURIComponent(id) + '&_=' + Date.now();
 
-    s.onerror = function() { fail('network error'); };
-    s.src = SCRIPT_URL + '?action=getScrapData&id=' + encodeURIComponent(id) + '&callback=' + cb;
-    document.body.appendChild(s);
+    fetch(url, { method: 'GET', redirect: 'follow', credentials: 'omit', cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function(txt) {
+        clearTimeout(timer);
+        var d;
+        try { d = JSON.parse(txt); }
+        catch (e) { throw new Error('unexpected response: ' + txt.slice(0, 80)); }
+        if (!d || !d.found) {
+          box.className = 'info info-error';
+          box.textContent = 'Task card ' + id + ' not found in TRACKING.';
+          return;
+        }
+        qcMinScrap = Number(d.minTotalScrap) || 0;
+        var p = d.printSubmitted ? String(Number(d.printScrap)) : 'not submitted yet';
+        var pp = d.postProcSubmitted ? String(Number(d.postProcScrap)) : 'not submitted yet';
+        box.innerHTML = 'Printing scrap: <b>' + p + '</b><br>' +
+                        'Post-processing scrap: <b>' + pp + '</b><br>' +
+                        'Minimum total scrapped: <b>' + qcMinScrap + '</b>';
+        document.getElementById('totalScrappedQty').min = qcMinScrap;
+        btn.disabled = false;
+      })
+      .catch(function(err) {
+        clearTimeout(timer);
+        fail(err && err.name === 'AbortError' ? 'timed out' : (err && err.message ? err.message : 'network error'));
+      });
   }
 
   // === SUBMIT FUNCTIONS ===
